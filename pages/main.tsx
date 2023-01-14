@@ -14,13 +14,25 @@ export default function Home() {
   const [data, setData] = useState(null);
 
   useEffect(() => {
-    fetch('https://localhost:3000/user.json')
+    fetch('http://localhost:3000/api/user.json')
       .then(response => response.json())
       .then(data => setData(data))
       .catch(console.error);
   }, []);
 
-  const userdata = data ? <div>{data}</div> : <div>Loading...</div>;
+  const userdata = data ? data.map((value) => (
+    <ListItem
+      key={value.guest}
+      disableGutters
+      secondaryAction={
+        <IconButton aria-label="comment">
+          <CommentIcon />
+        </IconButton>
+      }
+    >
+      <ListItemText primary={`Guest name:  ${value.guest}`} />
+    </ListItem>
+  )) : <div>Loading...</div>;
   const userlist = "test";
   
   return (
@@ -34,21 +46,10 @@ export default function Home() {
           alignItems: 'center',
         }}
       >        
+    
       <List sx={{ width: '100%', maxWidth: 360, bgcolor: 'background.paper' }}>
-  {[1, 2, 3].map((value) => (
-    <ListItem
-      key={value}
-      disableGutters
-      secondaryAction={
-        <IconButton aria-label="comment">
-          <CommentIcon />
-        </IconButton>
-      }
-    >
-      <ListItemText primary={`Line item ${value}`} />
-    </ListItem>
-  ))}
-</List>
+        {userdata}
+      </List>
 
         <ProTip />
         <Copyright />
